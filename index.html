@@ -3,116 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Nothing Project | 2026 Noir</title>
+    <title>The Nothing Project</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="vibe-layer"></div>
 
-    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/2361/2361-preview.mp3" preload="auto"></audio>
-    <audio id="snd-float" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
-    <audio id="snd-hustle" src="https://assets.mixkit.co/active_storage/sfx/131/131-preview.mp3" preload="auto"></audio>
-
-    <div class="container">
-        <header class="fade-in">
-            <div class="status-indicator">
-                <span class="dot"></span>
-                <span class="status-text">Living in 6-7</span>
-            </div>
+    <div class="chill-zone">
+        <header>
+            <div class="status-dot"></div>
             <h1>The Nothing Project</h1>
-            <p class="subtitle">Premium Inactivity Environment</p>
+            <p class="tagline">Anti-Hustle. Pro-Nap. Zero Productivity.</p>
         </header>
 
-        <main class="bento-grid">
-            <div class="card glass hero">
-                <div class="card-header">Vibe Control</div>
-                <h2 id="mode-text">Atmospheric Loafing</h2>
-                <div class="controls">
-                    <button class="glass-btn" onclick="triggerZen('breathe')">Deep Breath</button>
-                    <button class="glass-btn" onclick="triggerZen('block')">Hustle Blocker</button>
-                    <button class="glass-btn" onclick="triggerZen('float')">Clear Mind</button>
-                </div>
-                <p id="zen-message">Select a frequency...</p>
+        <section class="hero-card">
+            <h2>Current Mode: <span class="highlight">Creative Loafing</span></h2>
+            <p>Select your preferred method of doing nothing:</p>
+            
+            <div class="zen-menu">
+                <button class="zen-opt" onclick="runZen('breathe')">Digital Breath</button>
+                <button class="zen-opt" onclick="runZen('block')">Hustle Blocker</button>
+                <button class="zen-opt" onclick="runZen('float')">Declutter</button>
             </div>
+            <p id="zen-message">Awaiting your inactivity...</p>
+        </section>
 
-            <div class="card glass timer-zone">
-                <div class="card-header">Stolen Time</div>
-                <div id="nothing-timer">00:00</div>
-                <div id="rank">Amateur Loafer</div>
+        <section class="counter-card">
+            <p>You have been unproductive for:</p>
+            <div id="nothing-timer">00:00</div>
+            <p id="rank">Rank: Amateur Loafer</p>
+        </section>
+
+        <footer>
+            <div class="links">
+                <a href="#">Inaction Station</a>
+                <a href="#">Slackonomics</a>
+                <a href="#">LoafLab</a>
             </div>
-        </main>
-
-        <footer class="fade-in">
-            <p>© 2026 LoafLab. Relax, nothing is under control.</p>
         </footer>
     </div>
 
     <div id="hustle-overlay">
         <div class="overlay-content">
-            <h2 class="glitch">HUSTLE DETECTED</h2>
-            <p>Mandatory decompression in progress...</p>
+            <h1>SLACK MODE ACTIVE</h1>
+            <p>The grind has been paused for 10 seconds.</p>
         </div>
     </div>
 
     <script>
+        // --- TIMER & RANK LOGIC ---
         let seconds = parseInt(localStorage.getItem('nothingTime')) || 0;
-        
-        // --- TIMER ---
-        function updateCounter() {
+
+        function updateTimer() {
             seconds++;
             localStorage.setItem('nothingTime', seconds);
-            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const s = (seconds % 60).toString().padStart(2, '0');
-            document.getElementById('nothing-timer').innerText = `${m}:${s}`;
             
-            const r = document.getElementById('rank');
-            if(seconds > 600) r.innerText = "Void Voyager";
-            else if(seconds > 300) r.innerText = "Zen Master";
-            else if(seconds > 120) r.innerText = "Pro Loafer";
-        }
-        setInterval(updateCounter, 1000);
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('nothing-timer').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
-        // --- AUDIO & FX ---
-        function playSnd(id) {
-            const aud = document.getElementById(id);
-            aud.volume = 0.4;
-            aud.currentTime = 0;
-            aud.play().catch(e => console.log("Audio requires user interaction first"));
+            const rankMsg = document.getElementById('rank');
+            if (seconds > 300) rankMsg.innerText = "Rank: Zen Master";
+            else if (seconds > 120) rankMsg.innerText = "Rank: Professional Loafer";
+            else if (seconds > 60) rankMsg.innerText = "Rank: Dedicated Slacker";
+            else rankMsg.innerText = "Rank: Amateur Loafer";
         }
+        setInterval(updateTimer, 1000);
 
-        function triggerZen(type) {
-            const vibe = document.getElementById('vibe-layer');
+        // --- ZEN MODES LOGIC ---
+        function runZen(type) {
             const msg = document.getElementById('zen-message');
+            const body = document.body;
 
             if (type === 'breathe') {
-                playSnd('snd-breath');
-                vibe.classList.add('active-breath');
-                msg.innerText = "Synchronizing pulse...";
+                body.classList.add('meditating');
+                msg.innerText = "Inhale stillness... Exhale the hustle.";
                 setTimeout(() => {
-                    vibe.classList.remove('active-breath');
-                    msg.innerText = "Vibration reset.";
+                    body.classList.remove('meditating');
+                    msg.innerText = "Breath complete. 6-7 vibes achieved.";
                 }, 8000);
             } 
             else if (type === 'block') {
-                playSnd('snd-hustle');
                 const overlay = document.getElementById('hustle-overlay');
                 overlay.style.display = 'flex';
-                setTimeout(() => { overlay.style.display = 'none'; }, 10000);
+                msg.innerText = "System locked for maximum loafing.";
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    msg.innerText = "Break over. Try not to work too hard.";
+                }, 10000);
             } 
             else if (type === 'float') {
-                playSnd('snd-float');
-                msg.innerText = "Dissolving thoughts...";
-                for(let i=0; i<12; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'thought';
-                    el.innerText = ['☁️','🌿','✨','🌑'][Math.floor(Math.random()*4)];
-                    el.style.left = Math.random() * 100 + 'vw';
-                    el.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                    document.body.appendChild(el);
-                    setTimeout(() => el.remove(), 6000);
+                msg.innerText = "Releasing your productive thoughts...";
+                for(let i=0; i<15; i++) {
+                    createThought();
                 }
             }
+        }
+
+        function createThought() {
+            const emojis = ['☁️', '🌿', '☕', '🛋️', '💤'];
+            const span = document.createElement('span');
+            span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            span.className = 'floating-thought';
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(span);
+            setTimeout(() => span.remove(), 5000);
         }
     </script>
 </body>
