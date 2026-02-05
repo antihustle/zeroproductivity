@@ -1,4 +1,3 @@
-/* --- DESIGN SYSTEM (2026 AI REFINEMENT) --- */
 :root {
     --bg-color: #f8f9fa;
     --glass-bg: rgba(255, 255, 255, 0.7);
@@ -9,28 +8,24 @@
     --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
-/* --- BASE STYLES --- */
 body {
     background: radial-gradient(circle at top left, #e0eafc, #fcfcfc);
     color: var(--text-main);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif; /* Modern clean font */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    overflow-x: hidden;
-    transition: filter 0.8s ease, transform 0.8s ease;
 }
 
 .chill-zone {
-    max-width: 550px;
+    max-width: 600px;
     width: 90%;
-    text-align: center;
     animation: fadeIn 1.5s ease;
 }
 
-/* --- THE BENTO CARDS --- */
+/* Glassmorphism Cards */
 .hero-card, .counter-card {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
@@ -42,19 +37,7 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* --- UI ELEMENTS --- */
-.status-dot {
-    width: 10px;
-    height: 10px;
-    background: #55efc4;
-    border-radius: 50%;
-    margin: 0 auto 15px auto;
-    animation: pulse-green 2s infinite;
-}
-
-h1 { font-size: 2rem; margin: 0; letter-spacing: -1px; }
-.tagline { font-style: italic; color: var(--text-dim); margin-top: 5px; font-size: 0.9rem; }
-
+/* The Nothing Timer - Neon Glow */
 #nothing-timer {
     font-size: 4rem;
     font-weight: 800;
@@ -65,76 +48,42 @@ h1 { font-size: 2rem; margin: 0; letter-spacing: -1px; }
     margin: 10px 0;
 }
 
-#rank {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-}
-
-/* --- BUTTONS --- */
-.zen-menu {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
+/* Buttons - Modern Minimalist */
 .zen-opt {
     background: white;
-    border: 1px solid var(--glass-border);
+    border: none;
     padding: 12px 20px;
     border-radius: 12px;
     font-weight: 600;
     color: var(--text-dim);
-    cursor: pointer;
-    font-family: inherit;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .zen-opt:hover {
-    transform: translateY(-3px);
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     background: var(--accent-soft);
     color: white;
-    box-shadow: 0 10px 20px rgba(162, 155, 254, 0.2);
 }
 
-/* --- FEATURE 1: DIGITAL BREATH (THE REINFORCED FIX) --- */
-.meditating {
-    animation: breathe 8s ease-in-out infinite !important;
-    pointer-events: none;
+/* Status Dot Pulse */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: #55efc4;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    animation: pulse-green 2s infinite;
 }
 
-@keyframes breathe {
-    0%, 100% { 
-        transform: scale(1); 
-        filter: blur(0px) saturate(100%); 
-    }
-    50% { 
-        transform: scale(1.04); 
-        filter: blur(4px) saturate(50%); 
-    }
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(85, 239, 196, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(85, 239, 196, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(85, 239, 196, 0); }
 }
 
-/* --- FEATURE 2: HUSTLE BLOCKER --- */
-#hustle-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(162, 155, 254, 0.95); /* Soft Lavender Overlay */
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    color: white;
-    backdrop-filter: blur(15px);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
-/* --- FEATURE 3: FLOATING THOUGHTS --- */
-.floating-thought {
-    position: fixed;
-    bottom: -60px;
-    font-size: 2.5rem;
-    pointer-events: none;
-    z-index
