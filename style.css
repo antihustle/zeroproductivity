@@ -1,0 +1,144 @@
+/* --- COLORS & VIBE --- */
+:root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #4a4a4a;
+    --accent: #b19cd9; /* Sleepy Purple */
+    --border: #e0e0e0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: filter 0.5s ease;
+}
+
+/* --- THE CONTAINER --- */
+.chill-zone {
+    max-width: 500px;
+    width: 90%;
+    padding: 40px;
+    text-align: center;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    background: #ffcc00; /* Idle yellow */
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    box-shadow: 0 0 8px #ffcc00;
+}
+
+h1 { font-size: 1.8rem; margin: 0; letter-spacing: -1px; }
+.tagline { font-style: italic; color: #888; margin-top: 5px; font-size: 0.9rem; }
+
+/* --- CARDS --- */
+.hero-card, .counter-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: 8px 8px 0px var(--border);
+}
+
+.highlight { color: var(--accent); font-weight: bold; }
+
+/* --- ZEN MENU BUTTONS --- */
+.zen-menu {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.zen-opt {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    transition: 0.3s;
+}
+
+.zen-opt:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* --- THE NOTHING TIMER --- */
+#nothing-timer {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 10px 0;
+}
+
+#rank {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+}
+
+/* --- FEATURE 1: BREATHING ANIMATION --- */
+.meditating {
+    animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); filter: blur(2px); }
+}
+
+/* --- FEATURE 2: HUSTLE BLOCKER --- */
+#hustle-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(177, 156, 217, 0.98);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+}
+
+/* --- FEATURE 3: FLOATING THOUGHTS --- */
+.floating-thought {
+    position: fixed;
+    bottom: -50px;
+    font-size: 2.5rem;
+    pointer-events: none;
+    z-index: 1000;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* --- FOOTER --- */
+footer .links a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin: 0 10px;
+}
+
+footer .links a:hover { color: var(--accent); }
