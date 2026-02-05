@@ -1,144 +1,89 @@
-/* --- COLORS & VIBE --- */
 :root {
-    --bg: #f0f2f5;
-    --card: #ffffff;
-    --text: #4a4a4a;
-    --accent: #b19cd9; /* Sleepy Purple */
-    --border: #e0e0e0;
+    --bg-color: #f8f9fa;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-main: #2d3436;
+    --text-dim: #636e72;
+    --accent-soft: #a29bfe; /* Lavender */
+    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
 body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: 'Courier New', Courier, monospace;
+    background: radial-gradient(circle at top left, #e0eafc, #fcfcfc);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, sans-serif; /* Modern clean font */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    line-height: 1.6;
-    overflow-x: hidden;
-    transition: filter 0.5s ease;
 }
 
-/* --- THE CONTAINER --- */
 .chill-zone {
-    max-width: 500px;
+    max-width: 600px;
     width: 90%;
-    padding: 40px;
-    text-align: center;
+    animation: fadeIn 1.5s ease;
 }
 
-.status-dot {
-    width: 12px;
-    height: 12px;
-    background: #ffcc00; /* Idle yellow */
-    border-radius: 50%;
-    margin: 0 auto 10px auto;
-    box-shadow: 0 0 8px #ffcc00;
-}
-
-h1 { font-size: 1.8rem; margin: 0; letter-spacing: -1px; }
-.tagline { font-style: italic; color: #888; margin-top: 5px; font-size: 0.9rem; }
-
-/* --- CARDS --- */
+/* Glassmorphism Cards */
 .hero-card, .counter-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 25px;
-    margin: 30px 0;
-    box-shadow: 8px 8px 0px var(--border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 35px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
 }
 
-.highlight { color: var(--accent); font-weight: bold; }
-
-/* --- ZEN MENU BUTTONS --- */
-.zen-menu {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.zen-opt {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.75rem;
-    transition: 0.3s;
-}
-
-.zen-opt:hover {
-    background: var(--accent);
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* --- THE NOTHING TIMER --- */
+/* The Nothing Timer - Neon Glow */
 #nothing-timer {
-    font-size: 3rem;
-    font-weight: bold;
-    color: var(--accent);
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(45deg, var(--accent-soft), #74b9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin: 10px 0;
 }
 
-#rank {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #999;
+/* Buttons - Modern Minimalist */
+.zen-opt {
+    background: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* --- FEATURE 1: BREATHING ANIMATION --- */
-.meditating {
-    animation: breathe 8s ease-in-out infinite;
-}
-
-@keyframes breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); filter: blur(2px); }
-}
-
-/* --- FEATURE 2: HUSTLE BLOCKER --- */
-#hustle-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(177, 156, 217, 0.98);
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+.zen-opt:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    background: var(--accent-soft);
     color: white;
 }
 
-/* --- FEATURE 3: FLOATING THOUGHTS --- */
-.floating-thought {
-    position: fixed;
-    bottom: -50px;
-    font-size: 2.5rem;
-    pointer-events: none;
-    z-index: 1000;
-    animation: floatUp linear forwards;
+/* Status Dot Pulse */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: #55efc4;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    animation: pulse-green 2s infinite;
 }
 
-@keyframes floatUp {
-    to {
-        transform: translateY(-110vh) rotate(360deg);
-        opacity: 0;
-    }
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(85, 239, 196, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(85, 239, 196, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(85, 239, 196, 0); }
 }
 
-/* --- FOOTER --- */
-footer .links a {
-    color: #aaa;
-    text-decoration: none;
-    font-size: 0.8rem;
-    margin: 0 10px;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
-footer .links a:hover { color: var(--accent); }
