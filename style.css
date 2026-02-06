@@ -1,4 +1,4 @@
-/* --- VERSION2: DESIGN SYSTEM (2026 NOIR REFINEMENT) --- */
+/* --- NOIR DESIGN SYSTEM --- */
 :root {
     --bg-color: #08080a;
     --glass-bg: rgba(255, 255, 255, 0.03);
@@ -26,7 +26,7 @@ body {
     max-width: 550px;
     width: 90%;
     text-align: center;
-    animation: fadeIn 2s ease;
+    z-index: 10;
 }
 
 .hero-card, .counter-card {
@@ -50,6 +50,9 @@ body {
     animation: pulse-teal 2.5s infinite;
 }
 
+h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1.5px; }
+.tagline { color: var(--text-dim); margin-top: 5px; font-size: 0.9rem; }
+
 #nothing-timer {
     font-size: 5rem;
     font-weight: 800;
@@ -64,12 +67,12 @@ body {
 .zen-opt {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
-    padding: 14px 24px;
+    padding: 12px 24px;
     border-radius: 16px;
     color: var(--text-main);
-    cursor: pointer;
     font-weight: 600;
-    transition: 0.4s;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .zen-opt:hover {
@@ -77,20 +80,51 @@ body {
     color: #000;
 }
 
-/* MEDITATION BREATH FIX */
+/* FEATURE: BUBBLES WITH 2 GHOSTS & 3 SWAYS */
+.floating-thought {
+    position: fixed;
+    bottom: -60px;
+    pointer-events: none;
+    z-index: 100;
+    color: rgba(177, 159, 249, 0.6);
+    /* THE 2-GHOST EFFECT */
+    text-shadow: 
+        0 10px 10px rgba(177, 159, 249, 0.2), 
+        0 20px 20px rgba(177, 159, 249, 0.1);
+    will-change: transform, opacity;
+    animation: swayAndDissolve ease-in forwards;
+}
+
+@keyframes swayAndDissolve {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.7; }
+    /* SWAY 1 (Right) */
+    33% { transform: translateY(-40vh) translateX(var(--sway-width)); }
+    /* SWAY 2 (Left) */
+    66% { transform: translateY(-80vh) translateX(calc(var(--sway-width) * -1)); }
+    /* SWAY 3 (Final Drift) */
+    100% { 
+        transform: translateY(-120vh) translateX(calc(var(--sway-width) / 2)); 
+        opacity: 0; 
+        filter: blur(20px); 
+    }
+}
+
+/* FEATURE: MEDITATION BREATH */
 .meditating {
     animation: breathe 8s ease-in-out infinite !important;
 }
 
 @keyframes breathe {
-    0%, 100% { transform: scale(1); filter: blur(0px) brightness(100%); }
-    50% { transform: scale(1.02); filter: blur(8px) brightness(110%); }
+    0%, 100% { transform: scale(1); filter: blur(0px); }
+    50% { transform: scale(1.02); filter: blur(10px) brightness(1.1); }
 }
 
+/* FEATURE: HUSTLE OVERLAY */
 #hustle-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.98);
+    inset: 0;
+    background: rgba(0,0,0,0.98);
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -99,18 +133,11 @@ body {
     backdrop-filter: blur(50px);
 }
 
-.floating-thought {
-    position: fixed;
-    bottom: -80px;
-    font-size: 2.5rem;
-    pointer-events: none;
-    animation: floatUp ease-in forwards;
+footer .links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 0.8rem;
 }
 
-@keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-}
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse-teal { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
