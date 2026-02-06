@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- VERSION 2: DARK MODE -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -55,32 +54,29 @@
     </div>
 
     <script>
+        // --- TIMER LOGIC ---
         let seconds = parseInt(localStorage.getItem('nothingTime')) || 0;
-
-        function updateTimer() {
+        setInterval(() => {
             seconds++;
             localStorage.setItem('nothingTime', seconds);
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            document.getElementById('nothing-timer').innerText = 
-                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('nothing-timer').innerText = `${mins}:${secs}`;
 
             const rankMsg = document.getElementById('rank');
             if (seconds > 300) rankMsg.innerText = "Rank: Zen Master";
             else if (seconds > 120) rankMsg.innerText = "Rank: Professional Loafer";
             else if (seconds > 60) rankMsg.innerText = "Rank: Dedicated Slacker";
             else rankMsg.innerText = "Rank: Amateur Loafer";
-        }
-        setInterval(updateTimer, 1000);
+        }, 1000);
 
+        // --- ZEN MODES ---
         function runZen(type) {
             const msg = document.getElementById('zen-message');
             const body = document.getElementById('main-body');
 
             if (type === 'breathe') {
-                const b = document.getElementById('snd-breath');
-                b.volume = 0.3; // Low volume for relaxation
-                b.play();
+                document.getElementById('snd-breath').play();
                 body.classList.add('meditating');
                 msg.innerText = "Inhale stillness... Exhale the hustle.";
                 setTimeout(() => {
@@ -96,7 +92,7 @@
                 setTimeout(() => {
                     overlay.style.display = 'none';
                     msg.innerText = "Break over. Try not to work too hard.";
-                }, 5000); // Shortened to 5 seconds
+                }, 5000); // Updated to 5 seconds
             } 
             else if (type === 'float') {
                 document.getElementById('snd-chimes').play();
@@ -107,15 +103,24 @@
             }
         }
 
+        // --- BUBBLE ENGINE (3-SWAY PHYSICS) ---
         function createThought() {
-            const emojis = ['☁️', '🌿', '☕', '🛋️', '💤'];
+            const bubbles = ['🫧', '◌', '○', '◦']; 
             const span = document.createElement('span');
-            span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            span.innerText = bubbles[Math.floor(Math.random() * bubbles.length)];
             span.className = 'floating-thought';
-            span.style.left = Math.random() * 100 + 'vw';
-            span.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            const startX = Math.random() * 100;
+            const duration = Math.random() * 4 + 6;
+            
+            span.style.left = startX + 'vw';
+            span.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem';
+            span.style.animationDuration = duration + 's';
+            // Set random sway width for CSS var
+            span.style.setProperty('--sway-width', (Math.random() * 60 + 30) + 'px');
+            
             document.body.appendChild(span);
-            setTimeout(() => span.remove(), 6000);
+            setTimeout(() => span.remove(), duration * 1000);
         }
     </script>
 </body>
