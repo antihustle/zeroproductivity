@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- FIX DIGITAL BREATH -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,7 @@
 </head>
 <body id="main-body">
 
-    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/2361/2361-preview.mp3" preload="auto"></audio>
+    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/1126/1126-preview.mp3" preload="auto"></audio>
     <audio id="snd-chimes" src="https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3" preload="auto"></audio>
     <audio id="snd-hustle" src="https://assets.mixkit.co/active_storage/sfx/131/131-preview.mp3" preload="auto"></audio>
 
@@ -62,12 +63,6 @@
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
             const secs = (seconds % 60).toString().padStart(2, '0');
             document.getElementById('nothing-timer').innerText = `${mins}:${secs}`;
-
-            const rankMsg = document.getElementById('rank');
-            if (seconds > 300) rankMsg.innerText = "Rank: Zen Master";
-            else if (seconds > 120) rankMsg.innerText = "Rank: Professional Loafer";
-            else if (seconds > 60) rankMsg.innerText = "Rank: Dedicated Slacker";
-            else rankMsg.innerText = "Rank: Amateur Loafer";
         }, 1000);
 
         // --- ZEN MODES ---
@@ -76,51 +71,56 @@
             const body = document.getElementById('main-body');
 
             if (type === 'breathe') {
-                document.getElementById('snd-breath').play();
+                const b = document.getElementById('snd-breath');
                 body.classList.add('meditating');
-                msg.innerText = "Inhale stillness... Exhale the hustle.";
+                
+                // 5s Breath Cycle: 2s Inhale, 1s Hold, 2s Exhale
+                b.currentTime = 0;
+                b.volume = 0.1;
+                b.play();
+                msg.innerText = "Inhale the wind...";
+                
+                // Inhale Ramping
+                let inhaleInt = setInterval(() => { if(b.volume < 0.7) b.volume += 0.15; }, 300);
+
+                setTimeout(() => {
+                    clearInterval(inhaleInt);
+                    msg.innerText = "Hold the stillness...";
+                }, 2000);
+
+                setTimeout(() => {
+                    msg.innerText = "Exhale the hustle...";
+                    let exhaleInt = setInterval(() => { if(b.volume > 0.1) b.volume -= 0.1; }, 300);
+                    setTimeout(() => clearInterval(exhaleInt), 2000);
+                }, 3000);
+
                 setTimeout(() => {
                     body.classList.remove('meditating');
-                    msg.innerText = "Breath complete. 6-7 vibes achieved.";
-                }, 8000);
+                    msg.innerText = "Breath complete.";
+                    b.pause();
+                }, 5000);
             } 
             else if (type === 'block') {
                 document.getElementById('snd-hustle').play();
                 const overlay = document.getElementById('hustle-overlay');
                 overlay.style.display = 'flex';
-                msg.innerText = "System locked for maximum loafing.";
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    msg.innerText = "Break over. Try not to work too hard.";
-                }, 5000); // Updated to 5 seconds
+                setTimeout(() => { overlay.style.display = 'none'; }, 5000);
             } 
             else if (type === 'float') {
                 document.getElementById('snd-chimes').play();
-                msg.innerText = "Releasing your productive thoughts...";
-                for(let i=0; i<15; i++) {
-                    createThought();
-                }
+                for(let i=0; i<15; i++) { createThought(); }
             }
         }
 
-        // --- BUBBLE ENGINE (3-SWAY PHYSICS) ---
         function createThought() {
             const bubbles = ['🫧', '◌', '○', '◦']; 
             const span = document.createElement('span');
             span.innerText = bubbles[Math.floor(Math.random() * bubbles.length)];
             span.className = 'floating-thought';
-            
-            const startX = Math.random() * 100;
-            const duration = Math.random() * 4 + 6;
-            
-            span.style.left = startX + 'vw';
-            span.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem';
-            span.style.animationDuration = duration + 's';
-            // Set random sway width for CSS var
+            span.style.left = Math.random() * 100 + 'vw';
             span.style.setProperty('--sway-width', (Math.random() * 60 + 30) + 'px');
-            
             document.body.appendChild(span);
-            setTimeout(() => span.remove(), duration * 1000);
+            setTimeout(() => span.remove(), 7000);
         }
     </script>
 </body>
