@@ -8,7 +8,9 @@
 </head>
 <body id="main-body">
 
-    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/1126/1126-preview.mp3" preload="auto"></audio>
+    <div id="wind-cursor"></div>
+
+    <audio id="snd-breath" src="https://www.soundjay.com/nature/sounds/wind-01.mp3" preload="auto"></audio>
     <audio id="snd-chimes" src="https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3" preload="auto"></audio>
     <audio id="snd-hustle" src="https://assets.mixkit.co/active_storage/sfx/131/131-preview.mp3" preload="auto"></audio>
 
@@ -54,6 +56,40 @@
     </div>
 
     <script>
+        // --- DUST TRAIL ENGINE ---
+        const cursor = document.getElementById('wind-cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            // Move main cursor
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            // Create "Dust" particles
+            createDust(e.clientX, e.clientY);
+        });
+
+        function createDust(x, y) {
+            const dust = document.createElement('div');
+            dust.className = 'dust-particle';
+            
+            // Random offset so it looks like a cloud, not a line
+            const offsetX = (Math.random() - 0.5) * 15;
+            const offsetY = (Math.random() - 0.5) * 15;
+            
+            dust.style.left = (x + offsetX) + 'px';
+            dust.style.top = (y + offsetY) + 'px';
+            
+            // Randomize size
+            const size = Math.random() * 4 + 2;
+            dust.style.width = size + 'px';
+            dust.style.height = size + 'px';
+
+            document.body.appendChild(dust);
+
+            // Remove particle after animation
+            setTimeout(() => dust.remove(), 1000);
+        }
+
         // --- TIMER LOGIC ---
         let seconds = parseInt(localStorage.getItem('nothingTime')) || 0;
         setInterval(() => {
@@ -62,12 +98,6 @@
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
             const secs = (seconds % 60).toString().padStart(2, '0');
             document.getElementById('nothing-timer').innerText = `${mins}:${secs}`;
-
-            const rankMsg = document.getElementById('rank');
-            if (seconds > 300) rankMsg.innerText = "Rank: Zen Master";
-            else if (seconds > 120) rankMsg.innerText = "Rank: Professional Loafer";
-            else if (seconds > 60) rankMsg.innerText = "Rank: Dedicated Slacker";
-            else rankMsg.innerText = "Rank: Amateur Loafer";
         }, 1000);
 
         // --- ZEN MODES ---
@@ -77,29 +107,16 @@
 
             if (type === 'breathe') {
                 const b = document.getElementById('snd-breath');
-                
-                // CLICK-TO-PLAY TRIGGER (Standard for 2026 browsers)
+                b.pause();
                 b.currentTime = 0;
-                b.volume = 0.1;
-                b.play();
+                b.volume = 0.8; 
+                b.play(); 
 
                 body.classList.add('meditating');
                 msg.innerText = "Inhale the wind...";
                 
-                // Audio Volume Ramping (2s Inhale, 1s Hold, 2s Exhale)
-                let inhale = setInterval(() => { if(b.volume < 0.6) b.volume += 0.1; }, 250);
-                
-                setTimeout(() => { 
-                    clearInterval(inhale); 
-                    msg.innerText = "Hold the stillness..."; 
-                }, 2000);
-
-                setTimeout(() => {
-                    msg.innerText = "Exhale the hustle...";
-                    let exhale = setInterval(() => { if(b.volume > 0.1) b.volume -= 0.1; }, 250);
-                    setTimeout(() => clearInterval(exhale), 2000);
-                }, 3000);
-
+                setTimeout(() => { msg.innerText = "Hold the stillness..."; b.volume = 0.5; }, 2000);
+                setTimeout(() => { msg.innerText = "Exhale the hustle..."; b.volume = 0.2; }, 3000);
                 setTimeout(() => {
                     body.classList.remove('meditating');
                     msg.innerText = "Breath complete.";
@@ -108,30 +125,23 @@
             } 
             else if (type === 'block') {
                 document.getElementById('snd-hustle').play();
-                const overlay = document.getElementById('hustle-overlay');
-                overlay.style.display = 'flex';
-                setTimeout(() => { overlay.style.display = 'none'; }, 5000);
+                document.getElementById('hustle-overlay').style.display = 'flex';
+                setTimeout(() => { document.getElementById('hustle-overlay').style.display = 'none'; }, 5000);
             } 
             else if (type === 'float') {
                 document.getElementById('snd-chimes').play();
                 msg.innerText = "Releasing thoughts...";
-                for(let i=0; i<15; i++) {
-                    setTimeout(createThought, i * 200);
-                }
+                for(let i=0; i<15; i++) { setTimeout(createThought, i * 200); }
             }
         }
 
-        // --- BUBBLE ENGINE (3-SWAY & GHOSTS) ---
         function createThought() {
-            const bubbles = ['🫧', '◌', '○', '◦']; 
+            const bubbles = ['🫧', '◌', '○']; 
             const span = document.createElement('span');
             span.innerText = bubbles[Math.floor(Math.random() * bubbles.length)];
             span.className = 'floating-thought';
-            
             span.style.left = Math.random() * 100 + 'vw';
             span.style.setProperty('--sway-width', (Math.random() * 100 - 50) + 'px');
-            span.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
-            
             document.body.appendChild(span);
             setTimeout(() => span.remove(), 7000);
         }
