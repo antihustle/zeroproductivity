@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- VERSION 2: DARK MODE -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +7,11 @@
     <title>The Nothing Project</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="main-body">
+
+    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/2361/2361-preview.mp3" preload="auto"></audio>
+    <audio id="snd-chimes" src="https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3" preload="auto"></audio>
+    <audio id="snd-hustle" src="https://assets.mixkit.co/active_storage/sfx/131/131-preview.mp3" preload="auto"></audio>
 
     <div class="chill-zone">
         <header>
@@ -45,18 +50,16 @@
     <div id="hustle-overlay">
         <div class="overlay-content">
             <h1>SLACK MODE ACTIVE</h1>
-            <p>The grind has been paused for 10 seconds.</p>
+            <p>The grind has been paused for 5 seconds.</p>
         </div>
     </div>
 
     <script>
-        // --- TIMER & RANK LOGIC ---
         let seconds = parseInt(localStorage.getItem('nothingTime')) || 0;
 
         function updateTimer() {
             seconds++;
             localStorage.setItem('nothingTime', seconds);
-            
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
             document.getElementById('nothing-timer').innerText = 
@@ -70,12 +73,14 @@
         }
         setInterval(updateTimer, 1000);
 
-        // --- ZEN MODES LOGIC ---
         function runZen(type) {
             const msg = document.getElementById('zen-message');
-            const body = document.body;
+            const body = document.getElementById('main-body');
 
             if (type === 'breathe') {
+                const b = document.getElementById('snd-breath');
+                b.volume = 0.3; // Low volume for relaxation
+                b.play();
                 body.classList.add('meditating');
                 msg.innerText = "Inhale stillness... Exhale the hustle.";
                 setTimeout(() => {
@@ -84,15 +89,17 @@
                 }, 8000);
             } 
             else if (type === 'block') {
+                document.getElementById('snd-hustle').play();
                 const overlay = document.getElementById('hustle-overlay');
                 overlay.style.display = 'flex';
                 msg.innerText = "System locked for maximum loafing.";
                 setTimeout(() => {
                     overlay.style.display = 'none';
                     msg.innerText = "Break over. Try not to work too hard.";
-                }, 10000);
+                }, 5000); // Shortened to 5 seconds
             } 
             else if (type === 'float') {
+                document.getElementById('snd-chimes').play();
                 msg.innerText = "Releasing your productive thoughts...";
                 for(let i=0; i<15; i++) {
                     createThought();
@@ -106,9 +113,9 @@
             span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
             span.className = 'floating-thought';
             span.style.left = Math.random() * 100 + 'vw';
-            span.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            span.style.animationDuration = (Math.random() * 3 + 4) + 's';
             document.body.appendChild(span);
-            setTimeout(() => span.remove(), 5000);
+            setTimeout(() => span.remove(), 6000);
         }
     </script>
 </body>
