@@ -6,11 +6,11 @@
     <title>The Nothing Project</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body id="main-body" onclick="unlockAudio()">
+<body id="main-body">
 
-    <audio id="snd-breath" src="https://www.soundjay.com/nature/sounds/wind-01.mp3" preload="auto"></audio>
-    <audio id="snd-chimes" src="https://www.soundjay.com/nature/sounds/wind-chime-01.mp3" preload="auto"></audio>
-    <audio id="snd-hustle" src="https://www.soundjay.com/buttons/sounds/beep-01.mp3" preload="auto"></audio>
+    <audio id="snd-breath" src="https://assets.mixkit.co/active_storage/sfx/1126/1126-preview.mp3" preload="auto"></audio>
+    <audio id="snd-chimes" src="https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3" preload="auto"></audio>
+    <audio id="snd-hustle" src="https://assets.mixkit.co/active_storage/sfx/131/131-preview.mp3" preload="auto"></audio>
 
     <div class="chill-zone">
         <header>
@@ -54,16 +54,7 @@
     </div>
 
     <script>
-        // Unlock audio for browsers (Chrome/Safari)
-        function unlockAudio() {
-            const sounds = ['snd-breath', 'snd-chimes', 'snd-hustle'];
-            sounds.forEach(id => {
-                const s = document.getElementById(id);
-                s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
-            });
-            document.body.onclick = null; // Only need to do this once
-        }
-
+        // Timer Logic
         let seconds = parseInt(localStorage.getItem('nothingTime')) || 0;
         setInterval(() => {
             seconds++;
@@ -79,21 +70,31 @@
 
             if (type === 'breathe') {
                 const b = document.getElementById('snd-breath');
-                body.classList.add('meditating');
                 
+                // Audio Trigger
                 b.currentTime = 0;
                 b.volume = 0.1;
-                b.play();
+                b.play(); // Direct user-click trigger
+
+                body.classList.add('meditating');
                 msg.innerText = "Inhale the wind...";
                 
-                let inhaleInt = setInterval(() => { if(b.volume < 0.7) b.volume += 0.15; }, 300);
+                // Volume Ramping (Wind Effect)
+                let inhaleInt = setInterval(() => { if(b.volume < 0.6) b.volume += 0.1; }, 300);
+                
                 setTimeout(() => { clearInterval(inhaleInt); msg.innerText = "Hold..."; }, 2000);
+                
                 setTimeout(() => {
                     msg.innerText = "Exhale...";
                     let exhaleInt = setInterval(() => { if(b.volume > 0.1) b.volume -= 0.1; }, 300);
                     setTimeout(() => clearInterval(exhaleInt), 2000);
                 }, 3000);
-                setTimeout(() => { body.classList.remove('meditating'); msg.innerText = "Breath complete."; b.pause(); }, 5000);
+
+                setTimeout(() => {
+                    body.classList.remove('meditating');
+                    msg.innerText = "Breath complete.";
+                    b.pause();
+                }, 5000);
             } 
             else if (type === 'block') {
                 document.getElementById('snd-hustle').play();
@@ -103,21 +104,18 @@
             else if (type === 'float') {
                 document.getElementById('snd-chimes').play();
                 msg.innerText = "Bubbles rising...";
-                for(let i=0; i<20; i++) { 
-                    setTimeout(createThought, i * 150); 
-                }
+                for(let i=0; i<15; i++) { setTimeout(createThought, i * 200); }
             }
         }
 
         function createThought() {
-            const bubbles = ['🫧', '◌', '○', '◦']; 
+            const bubbles = ['🫧', '◌', '○']; 
             const span = document.createElement('span');
             span.innerText = bubbles[Math.floor(Math.random() * bubbles.length)];
             span.className = 'floating-thought';
             span.style.left = Math.random() * 100 + 'vw';
-            span.style.setProperty('--sway-width', (Math.random() * 80 - 40) + 'px');
+            span.style.setProperty('--sway-width', (Math.random() * 100 - 50) + 'px');
             document.body.appendChild(span);
-            // Ensure removal after animation
             setTimeout(() => span.remove(), 7000);
         }
     </script>
