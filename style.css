@@ -1,11 +1,7 @@
 :root {
     --bg-color: #08080a;
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
     --text-main: #f0f0f0;
-    --text-dim: #94a3b8;
     --accent-soft: #b19ff9; 
-    --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
 body {
@@ -20,66 +16,76 @@ body {
     overflow: hidden;
 }
 
-.hero-card, .counter-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 32px;
-    padding: 35px;
-    margin: 20px 0;
-    box-shadow: var(--shadow);
+/* BUBBLES - FIXED VISIBILITY */
+.floating-thought {
+    position: fixed;
+    bottom: -100px;
+    pointer-events: none;
+    z-index: 999; /* Ensure they are on top */
+    color: rgba(255, 255, 255, 0.8); /* White/Transparent bubbles */
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(177, 159, 249, 0.5);
+    animation: swayAndDissolve 7s ease-in forwards;
 }
 
-/* DIGITAL BREATH: 5s SYNCED ANIMATION */
+@keyframes swayAndDissolve {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    33% { transform: translateY(-30vh) translateX(var(--sway-width)); }
+    66% { transform: translateY(-70vh) translateX(calc(var(--sway-width) * -1)); }
+    100% { 
+        transform: translateY(-110vh) translateX(calc(var(--sway-width) / 2)); 
+        opacity: 0; 
+        filter: blur(10px); 
+    }
+}
+
 .meditating {
     animation: breathe 5s ease-in-out forwards !important;
 }
 
 @keyframes breathe {
     0% { transform: scale(1); filter: blur(0px); }
-    40% { transform: scale(1.05); filter: blur(10px) brightness(1.2); }
-    60% { transform: scale(1.05); filter: blur(10px) brightness(1.2); }
+    40% { transform: scale(1.06); filter: blur(12px) brightness(1.2); }
+    60% { transform: scale(1.06); filter: blur(12px) brightness(1.2); }
     100% { transform: scale(1); filter: blur(0px); }
 }
 
-/* BUBBLES: 2-GHOST & 3-SWAY */
-.floating-thought {
-    position: fixed;
-    bottom: -60px;
-    pointer-events: none;
-    color: rgba(177, 159, 249, 0.6);
-    text-shadow: 0 10px 10px rgba(177, 159, 249, 0.2), 0 20px 20px rgba(177, 159, 249, 0.1);
-    animation: swayAndDissolve 7s ease-in forwards;
+/* Rest of your styling... */
+.hero-card, .counter-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    padding: 35px;
+    margin: 20px 0;
 }
 
-@keyframes swayAndDissolve {
-    0% { transform: translateY(0) translateX(0); opacity: 0; }
-    10% { opacity: 0.7; }
-    33% { transform: translateY(-40vh) translateX(var(--sway-width)); }
-    66% { transform: translateY(-80vh) translateX(calc(var(--sway-width) * -1)); }
-    100% { transform: translateY(-120vh) translateX(calc(var(--sway-width) / 2)); opacity: 0; filter: blur(20px); }
+#nothing-timer {
+    font-size: 5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #b19ff9, #6c5ce7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.zen-opt {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 24px;
+    border-radius: 16px;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
 }
 
 #hustle-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.98);
+    background: rgba(0,0,0,0.95);
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    backdrop-filter: blur(50px);
+    z-index: 10000;
 }
-
-.zen-opt {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--glass-border);
-    padding: 12px 24px;
-    border-radius: 16px;
-    color: white;
-    cursor: pointer;
-}
-
-.status-dot { width: 10px; height: 10px; background: #00ffcc; border-radius: 50%; margin: 0 auto 15px; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
